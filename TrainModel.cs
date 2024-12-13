@@ -169,10 +169,13 @@ namespace ImageRecognitionApp
                     {
                         lblResult.Text = $"Predicted Category: {prediction.PredictedLabel} ({confidence:F2}% confidence)";
                         Console.WriteLine($"Predicted Category: {prediction.PredictedLabel} ({confidence:F2}% confidence)");
+
+                        lblResult.BackColor = Color.Green;
                     }
                     else
                     {
                         lblResult.Text = "Not Found";
+                        lblResult.BackColor = Color.Red;
                     }
                     
                 }

@@ -1,5 +1,7 @@
 using AForge.Video.DirectShow;
 using AForge.Video;
+using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace ImageRecognitionApp
 {
@@ -10,6 +12,7 @@ namespace ImageRecognitionApp
         public CaptureImages()
         {
             InitializeComponent();
+            //bindDDL();
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -79,6 +82,34 @@ namespace ImageRecognitionApp
                 videoCapture.SignalToStop();
                 videoCapture.WaitForStop();
                 videoCapture = null;
+            }
+        }
+        private void bindDDL()
+        {
+            try
+            {
+                string query = "SELECT ModelId, Model FROM Models";
+                string connectionString = "Data Source=DESKTOP-LNVC5VP\\SQLEXPRESS;Initial Catalog=ImageRecognition;Integrated Security=True;Trust Server Certificate=True";
+
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                {
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    conn.Open();
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dataTable = new DataTable();
+                    adapter.Fill(dataTable);
+
+                    cmbModel.DataSource = dataTable;
+                    cmbModel.DisplayMember = "Model"; 
+                    cmbModel.ValueMember = "ModelId";
+                    cmbModel.SelectedIndex = -1;     
+                    conn.Close();
+                }
+            }
+            catch (Exception)
+            {
+                throw;
             }
         }
     }
